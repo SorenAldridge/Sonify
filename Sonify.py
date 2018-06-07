@@ -15,26 +15,25 @@ software distributed under the License is distributed on an
 KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
- '''
+'''
 
- #Author: Soren Zhane Chapman-Aldridge
- #Date Created: 6/6/18
+# Author: Soren Zhane Chapman-Aldridge
+# Date Created: 6/6/18
 
 from tkinter import filedialog
 from tkinter import Tk
+from numpy import vstack
 import csv
 import numpy
 import math
-import os, sys
-from numpy import vstack
+import os
+import sys
+
 
 MIDI_SIZE = 4
 subarray = []
-midinotes = numpy.empty((1000,4))
-i = 0
+midinotes = numpy.zeros((1, 4))
 
-print(midinotes)
-print(subarray.__sizeof__)
 #set Tk() as root 
 root = Tk()
 #hide tk root window
@@ -45,8 +44,7 @@ root.filename =  filedialog.askopenfilename(initialdir = os.path.dirname(sys.arg
 #open csv reader
 with open(root.filename, newline='') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+    print('Yeeto McSkeeto')
     for row in csvreader:
-        print(row)
         midinotes = vstack((midinotes, row))
-        
     print(midinotes)
