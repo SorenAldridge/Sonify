@@ -34,7 +34,7 @@ public class Sonify extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("sonify.fxml"));
-        primaryStage.setTitle("General Transit Feed Specification Tool");
+        primaryStage.setTitle("Sonify");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

@@ -19,5 +19,41 @@
 
 package wsgc2018;
 
-public class Controller {
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.MenuItem;
+import javafx.stage.FileChooser;
+
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+
+public class Controller implements Initializable {
+
+    //Filechooser
+    FileChooser fileChooser;
+    File openFile;
+    private final String defaultDirectoryString = "";
+    File defaultDirectory;
+    ClassLoader classLoader;
+
+    @FXML
+    private MenuItem openItem;
+
+    @FXML
+    private void openFile(){
+        openFile = fileChooser.showOpenDialog(null);
+    }
+
+    public void initialize(URL location, ResourceBundle resources) {
+        classLoader = ClassLoader.getSystemClassLoader();
+        fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("CSV Files (.csv)", "*.csv", ".CSV"),
+                new FileChooser.ExtensionFilter("Text Files (.txt)", "*.txt", ".TXT"));
+        defaultDirectory = new File(classLoader.getResource(defaultDirectoryString).getFile());
+        fileChooser.setInitialDirectory(defaultDirectory);
+        fileChooser.setTitle("Open Data");
+    }
 }
