@@ -23,6 +23,7 @@ under the License.
 from tkinter import filedialog
 from tkinter import Tk
 from numpy import vstack
+from miditime.miditime import MIDITime
 import csv
 import numpy
 import math
@@ -32,8 +33,9 @@ import sys
 
 MIDI_SIZE = 4
 subarray = []
-midinotes = numpy.zeros((1, 4))
-
+midinotes = numpy.ones((1, 4), int)
+midinotes = midinotes.astype(numpy.int)
+print(midinotes)
 #set Tk() as root 
 root = Tk()
 #hide tk root window
@@ -44,7 +46,12 @@ root.filename =  filedialog.askopenfilename(initialdir = os.path.dirname(sys.arg
 #open csv reader
 with open(root.filename, newline='') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',', quotechar='|')
-    print('Yeeto McSkeeto')
     for row in csvreader:
-        midinotes = vstack((midinotes, row))
-    print(midinotes)
+        introw = list(map(int, row))
+        midinotes = vstack((midinotes, introw))
+
+    print(midinotes)       
+
+mymidi = MIDITime(1200, 'export.mid', 5, 5, 1)
+mymidi.add_track(midinotes)
+mymidi.save_midi()
