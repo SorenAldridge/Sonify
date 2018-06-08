@@ -25,6 +25,7 @@ from tkinter import Tk
 import csv
 import numpy
 import math
+import os, sys
 from numpy import vstack
 
 MIDI_SIZE = 4
@@ -39,15 +40,13 @@ root = Tk()
 #hide tk root window
 root.withdraw()
 #open filechooser to select csv file
-root.filename =  filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("csv files","*.csv"),("txt files","*.txt"),("all files","*.*")))
+root.filename =  filedialog.askopenfilename(initialdir = os.path.dirname(sys.argv[0])+'\Test Files' ,title = "Select file",filetypes = (("csv files","*.csv"),("txt files","*.txt"),("all files","*.*")))
 
 #open csv reader
 with open(root.filename, newline='') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',', quotechar='|')
     for row in csvreader:
         print(row)
-        i + 1
-        print(i)
-        #midinotes = vstack((midinotes, subarray))
-        #subarray.clear()
-    #print(midinotes)
+        midinotes = vstack((midinotes, row))
+        
+    print(midinotes)
