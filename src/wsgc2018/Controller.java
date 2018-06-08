@@ -19,13 +19,18 @@
 
 package wsgc2018;
 
+import com.opencsv.CSVReader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.Reader;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
 
@@ -44,6 +49,28 @@ public class Controller implements Initializable {
     @FXML
     private void openFile(){
         openFile = fileChooser.showOpenDialog(null);
+
+
+        String n = "1";
+        HeaderType = new HeaderType();
+
+    }
+
+    private static void parseCSV(File file) throws Exception{
+        try (
+                Reader reader = new BufferedReader(file);
+                CSVReader csvReader = new CSVReader(reader);
+        ) {
+            // Reading Records One by One in a String array
+            String[] nextRecord;
+            while ((nextRecord = csvReader.readNext()) != null) {
+                System.out.println("Name : " + nextRecord[0]);
+                System.out.println("Email : " + nextRecord[1]);
+                System.out.println("Phone : " + nextRecord[2]);
+                System.out.println("Country : " + nextRecord[3]);
+                System.out.println("==========================");
+            }
+        }
     }
 
     public void initialize(URL location, ResourceBundle resources) {
