@@ -22,7 +22,9 @@ package wsgc2018;
 import com.opencsv.CSVReader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.BufferedReader;
@@ -30,57 +32,84 @@ import java.io.File;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
 public class Controller implements Initializable {
 
-    //Filechooser
     FileChooser fileChooser;
     File openFile;
     private final String defaultDirectoryString = "";
     File defaultDirectory;
     ClassLoader classLoader;
+    List<HeaderType> headerTypeList;
+    String[] header;
 
     @FXML
     private MenuItem openItem;
 
     @FXML
+    private VBox graphBox;
+
+    @FXML
     private void openFile(){
         openFile = fileChooser.showOpenDialog(null);
-
-
-        String n = "1";
-        HeaderType = new HeaderType();
+        try{
+            System.out.println(openFile.toURI().toString());
+            parseCSV(openFile);
+        }catch (Exception e){
+            System.out.println("ParseCSV Exception: " + e);
+        }
+        //HeaderType = new HeaderType();
 
     }
 
-    private static void parseCSV(File file) throws Exception{
-        try (
-                Reader reader = new BufferedReader(file);
-                CSVReader csvReader = new CSVReader(reader);
-        ) {
-            // Reading Records One by One in a String array
-            String[] nextRecord;
-            while ((nextRecord = csvReader.readNext()) != null) {
-                System.out.println("Name : " + nextRecord[0]);
-                System.out.println("Email : " + nextRecord[1]);
-                System.out.println("Phone : " + nextRecord[2]);
-                System.out.println("Country : " + nextRecord[3]);
-                System.out.println("==========================");
+    private void parseCSV(File file){
+        try {
+            Reader reader = Files.newBufferedReader(Paths.get(file.toURI()));
+            CSVReader csvReader = new CSVReader(reader);
+            //Identify Header for creating HeaderType objects
+            header = csvReader.readNext();
+            //Create HeaderType Objects
+            for (int i = 0; i < header.length;i++){
+                headerTypeList.add(new HeaderType(i, header[i]));
+            }
+            System.out.println(headerTypeList.size());
+            for (int i =0;i<headerTypeList.size();i++){
+                System.out.println(headerTypeList.get(i).getDataName());
+                System.out.println(headerTypeList.get(i).getIndex());
             }
         }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("File IO Exception: " + e);
+        }
+
+
+    }
+
+    private void populateGraphs(){
+        for (int i =0;i<headerTypeList.size();i++){
+
+        }
+
     }
 
     public void initialize(URL location, ResourceBundle resources) {
         classLoader = ClassLoader.getSystemClassLoader();
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("CSV Files (.csv)", "*.csv", ".CSV"),
+                new FileChooser.ExtensionFilter("CSV Files (.csv)",  "*.csv", ".CSV"),
                 new FileChooser.ExtensionFilter("Text Files (.txt)", "*.txt", ".TXT"));
         defaultDirectory = new File(classLoader.getResource(defaultDirectoryString).getFile());
         fileChooser.setInitialDirectory(defaultDirectory);
         fileChooser.setTitle("Open Data");
+        headerTypeList = new ArrayList<HeaderType>();
+
+
     }
 }
