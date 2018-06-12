@@ -49,12 +49,17 @@ public class Controller implements Initializable {
     List<HeaderType> headerTypeList;
     String[] header;
 
+    enum attributes{time, pitch, velocity, duration};
+
     @FXML
     private MenuItem openItem;
 
     @FXML
     private VBox graphBox;
 
+    /**
+     * This Method Opens a CSV file with a filechooser
+     */
     @FXML
     private void openFile(){
         openFile = fileChooser.showOpenDialog(null);
@@ -68,6 +73,11 @@ public class Controller implements Initializable {
 
     }
 
+    /**
+     * This method takes a File pointer to a CSV file, instantiates a CSVReader and grabs data from the CSV file
+     *
+     * @param file  file to be read
+     */
     private void parseCSV(File file){
         try {
             Reader reader = Files.newBufferedReader(Paths.get(file.toURI()));
@@ -88,10 +98,11 @@ public class Controller implements Initializable {
             e.printStackTrace();
             System.out.println("File IO Exception: " + e);
         }
-
-
     }
 
+    /**
+     * This method will populate the graphs with DataBox type custom JFX element
+     */
     private void populateGraphs(){
         for (int i =0;i<headerTypeList.size();i++){
 
@@ -99,6 +110,12 @@ public class Controller implements Initializable {
 
     }
 
+    /**
+     * configures GUI elements before the user interacts with them
+     *
+     * @param location
+     * @param resources
+     */
     public void initialize(URL location, ResourceBundle resources) {
         classLoader = ClassLoader.getSystemClassLoader();
         fileChooser = new FileChooser();
@@ -109,7 +126,5 @@ public class Controller implements Initializable {
         fileChooser.setInitialDirectory(defaultDirectory);
         fileChooser.setTitle("Open Data");
         headerTypeList = new ArrayList<HeaderType>();
-
-
     }
 }
